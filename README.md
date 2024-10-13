@@ -25,6 +25,6 @@ This will not work natively in GDScript, and will require you to create a C# scr
 - Make a more in-depth readme with more of the actual usage details of the console.
 - Add further customisation options to the console (background opacity, accent color, size)
 - Save and load console settings
-- Autocomplete and suggestion functionality
-- Key blacklisting (for example when you press \` to close the console it also types a \` into it, and we don't want that)
+- ~~Autocomplete and suggestion functionality~~ done!
+- ~~Key blacklisting (for example when you press \` to close the console it also types a \` into it, and we don't want that)~~ Implemented differently but also done!
 - Other small fixes and improvements.
