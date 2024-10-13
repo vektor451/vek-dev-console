@@ -1,0 +1,41 @@
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://bce0bt2hng6ad"]
+
+[ext_resource type="FontVariation" uid="uid://icyg3f00kg68" path="res://addons/vekDevConsole/fonts/Roboto Mono/robotoMonoConsole.tres" id="1_ed0y2"]
+[ext_resource type="FontVariation" uid="uid://bgwgc12twcwkc" path="res://addons/vekDevConsole/fonts/Roboto Mono/robotoMonoBoldConsole.tres" id="2_8asuq"]
+[ext_resource type="FontVariation" uid="uid://cyad4p5vd6mwt" path="res://addons/vekDevConsole/fonts/Roboto Mono/robotoMonoBoldItalicConsole.tres" id="3_c868y"]
+[ext_resource type="FontVariation" uid="uid://ytemdg1ri1v8" path="res://addons/vekDevConsole/fonts/Roboto Mono/robotoMonoItalicConsole.tres" id="4_1m37d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_atmbc"]
+bg_color = Color(0, 0, 0, 0)
+border_width_top = 2
+border_width_bottom = 2
+border_color = Color(0, 0.8, 0.533333, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lgsi7"]
+bg_color = Color(0, 0, 0, 0.686275)
+border_width_bottom = 2
+border_color = Color(0, 0.8, 0.533333, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xvgeo"]
+
+[resource]
+Label/font_sizes/font_size = 16
+Label/fonts/font = ExtResource("1_ed0y2")
+LineEdit/font_sizes/font_size = 16
+LineEdit/fonts/font = ExtResource("1_ed0y2")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_atmbc")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_atmbc")
+LineEdit/styles/read_only = SubResource("StyleBoxFlat_atmbc")
+Panel/styles/panel = SubResource("StyleBoxFlat_lgsi7")
+RichTextLabel/colors/selection_color = Color(0.1, 0.1, 1, 0.54902)
+RichTextLabel/font_sizes/bold_font_size = 16
+RichTextLabel/font_sizes/bold_italics_font_size = 16
+RichTextLabel/font_sizes/italics_font_size = 16
+RichTextLabel/font_sizes/mono_font_size = 16
+RichTextLabel/font_sizes/normal_font_size = 16
+RichTextLabel/fonts/bold_font = ExtResource("2_8asuq")
+RichTextLabel/fonts/bold_italics_font = ExtResource("3_c868y")
+RichTextLabel/fonts/italics_font = ExtResource("4_1m37d")
+RichTextLabel/fonts/mono_font = ExtResource("1_ed0y2")
+RichTextLabel/fonts/normal_font = ExtResource("1_ed0y2")
+RichTextLabel/styles/focus = SubResource("StyleBoxEmpty_xvgeo")
