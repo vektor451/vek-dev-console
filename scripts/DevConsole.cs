@@ -257,4 +257,23 @@ public partial class DevConsole : Node
 			Print($"[color=Paleturquoise][b]{command.Key}:[/b][/color] {command.Value.Description}");
 		}
 	}
+
+	public static List<string> SuggestCommands(string text)
+	{
+		List<string> commands = new();
+
+		if(text == "")
+			return commands;
+		
+		foreach (KeyValuePair <string,Command> command in _commands)
+		{
+			if (command.Key.StartsWith(text))
+			{
+				commands.Add(command.Key);
+			}
+		}
+
+		return commands;
+	}
+
 }

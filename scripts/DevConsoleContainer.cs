@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Godot;
 
 [Tool]
 public partial class DevConsoleContainer : Control
 {
 	const string THEME_PATH = "res://addons/vekDevConsole/consoleTheme.tres";
+	const string AUTOCOMPLETE_OVERRIDE_PATH = "res://addons/vekDevConsole/autoCompleteStyleBox.tres";
 	public float AnimLen = 0.25f;
 	public float ScreenDiv = 2.25f;
 
@@ -13,6 +15,7 @@ public partial class DevConsoleContainer : Control
 	LineEdit _consoleInput;
 	RichTextLabel _consoleLog;
 	Label _consoleInfo;
+	Label _autoCompleteLabel;
 	VBoxContainer _consoleContainer;
 
 	bool _showConsole = false;
@@ -20,7 +23,10 @@ public partial class DevConsoleContainer : Control
 
 	ulong _prevFrame = 0;
 	float _unscaledDelta = 0;
-	
+
+	List<string> _autoCompleteStrings; 
+	int _autoCompleteIndex = 0;
+	bool _iterateAutoComplete = false;
 	// Called when the node enters the scene tree for the first time.
 	public override void _EnterTree()
 	{
@@ -69,11 +75,18 @@ public partial class DevConsoleContainer : Control
 		_consoleInput.ContextMenuEnabled = false;
 		
 		_consoleInput.TextSubmitted += OnTextSubmitted;
+		_consoleInput.TextChanged += OnTextChanged;
 
 		_consoleContainer.AddChild(_consoleInput);
 
-		ApplyFontSize();
+		// Autocomplete
+		_autoCompleteLabel = new();
+		_autoCompleteLabel.AddThemeStyleboxOverride("normal", GD.Load<StyleBox>(AUTOCOMPLETE_OVERRIDE_PATH));
+		_consoleInput.AddChild(_autoCompleteLabel);
+		//_autoCompleteLabel.Visible = false;
+		_autoCompleteLabel.Position = new(0,32);
 
+		ApplyFontSize();
 	}
 
     public override void _Ready()
@@ -154,13 +167,57 @@ public partial class DevConsoleContainer : Control
 		if(Input.IsActionJustPressed("dev_console"))
 		{
 			_showConsole = !_showConsole;
+
+			if(_showConsole)
+			{
+				CallDeferred(nameof(EnableInput));
+				_consoleInput.GrabFocus();
+			}
+			else
+			{
+				_consoleInput.Editable = false;
+			}
+		}
+		if(Input.IsActionJustPressed("ui_text_indent") && _autoCompleteStrings.Count > 0)
+		{
+			if (_iterateAutoComplete)
+			{
+				_autoCompleteIndex++;
+				if(_autoCompleteIndex == _autoCompleteStrings.Count)
+					_autoCompleteIndex = 0;
+			}
+			
+			_consoleInput.Text = $"{_autoCompleteStrings[_autoCompleteIndex]} ";
+			_consoleInput.CaretColumn = _consoleInput.Text.Length;
+			CallDeferred(nameof(AutocompleteDefer));
 		}
     }
+
+	public void OnTextChanged(string text)
+	{
+		List<string> commands = DevConsole.SuggestCommands(text);
+		_autoCompleteLabel.Text = "";
+
+		foreach (string command in commands)
+		{
+			_autoCompleteLabel.Text += $"{command}\n";
+		}
+
+		if (_autoCompleteLabel.Text == "")
+			_autoCompleteLabel.Visible = false;
+		else
+			_autoCompleteLabel.Visible = true;
+
+		_autoCompleteStrings = commands;
+		_iterateAutoComplete = false;
+		_autoCompleteIndex = 0;
+	}
 
 	public void ApplyFontSize()
 	{
 		_consoleInfo.AddThemeFontSizeOverride("font_size", FontSize);
 		_consoleInput.AddThemeFontSizeOverride("font_size", FontSize);
+		_autoCompleteLabel.AddThemeFontSizeOverride("font_size", FontSize);
 		_consoleLog.AddThemeFontSizeOverride("normal_font_size", FontSize);
 		_consoleLog.AddThemeFontSizeOverride("mono_font_size", FontSize);
 		_consoleLog.AddThemeFontSizeOverride("bold_font_size", FontSize);
@@ -184,6 +241,7 @@ public partial class DevConsoleContainer : Control
 	private void UpdateLogSize()
 	{
 		_consoleLog.CustomMinimumSize = new(Size.X, _consoleLog.Position.Y);
+		_autoCompleteLabel.Position = new(0,_consoleInput.Size.Y);
 	}
 
 	public void Print(string text)
@@ -227,5 +285,16 @@ public partial class DevConsoleContainer : Control
 	private void ClearConsole()
 	{
 		_consoleLog.Text = "";
+	}
+
+	private void EnableInput()
+	{
+		_consoleInput.Editable = true;
+	}
+
+	private void AutocompleteDefer()
+	{
+		_consoleInput.GrabFocus();
+		_iterateAutoComplete = true;
 	}
 }
