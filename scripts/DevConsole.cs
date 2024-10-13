@@ -75,14 +75,6 @@ public partial class DevConsole : Node
 
     public override void _Ready()
     {
-        for (int i = 0; i < 10; i++)
-		{
-			Print("chungus [color=Cyan]face[/color]", PrintType.Warning);
-			Print("chungus [color=Cyan]face[/color]", PrintType.Error);
-			Print("chungus [color=Cyan]face[/color]", PrintType.Success);
-			Print("chungus [color=Cyan]face[/color]", PrintType.Normal);
-		}
-
 		// Add commands
 		AddCommand("help", new(){
 			Action = HelpCommand,
@@ -228,6 +220,7 @@ public partial class DevConsole : Node
 			{
 				GD.PushError("Tried to add command \"" + name + "\" to the console, however it has incompatible types. "
 				+ "Only ints, floats, strings, and bools are supported.");
+				return;
 			}
 		}
 
@@ -261,7 +254,7 @@ public partial class DevConsole : Node
 	{
 		foreach (KeyValuePair<string,Command> command in _commands)
 		{
-			Print($"{command.Key}: {command.Value.Description}");
+			Print($"[color=Paleturquoise][b]{command.Key}:[/b][/color] {command.Value.Description}");
 		}
 	}
 }
