@@ -68,22 +68,22 @@ public partial class DevConsole : Node
 		{typeof(bool).ToString(),"Boolean"},
 	};
 
-    public override void _EnterTree()
-    {
-        ConsoleSetTask = new();
-    }
+	public override void _EnterTree()
+	{
+		ConsoleSetTask = new();
+	}
 
-    public override void _Ready()
-    {
+	public override void _Ready()
+	{
 		// Add commands
 		AddCommand("help", new(){
 			Action = HelpCommand,
 			ReadAction = HelpAll,
 			Description = "List all commands and their descriptions, or specify a command and get it's arguments as well."
 		});
-    }
+	}
 
-    public static void Print(string text, PrintType type = PrintType.Normal)
+	public static void Print(string text, PrintType type = PrintType.Normal)
 	{
 		if(_consoleContainer == null)
 		{
@@ -251,20 +251,24 @@ public partial class DevConsole : Node
 		Print(GetArgsString(_commands[name]));
 	}
 	public static void HelpAll()
-	{
+	{		
+		int padding = 0;
+		
 		List<string> sortedHelp = new();
 		
 		foreach (KeyValuePair<string,Command> command in _commands)
 		{
-			sortedHelp.Add($"[color=Paleturquoise][b]{command.Key}:[/b][/color] {command.Value.Description}");
+			sortedHelp.Add($"[cell][color=Paleturquoise][b]{command.Key}: [/b][/color][/cell][cell]{command.Value.Description}[/cell]");
 		}
 
 		sortedHelp.Sort();
-
+		
+		Print("[table={2}]");
 		foreach (string command in sortedHelp)
 		{
 			Print(command);
 		}
+		Print("[/table]");
 	}
 
 	public static List<string> SuggestCommands(string text)
