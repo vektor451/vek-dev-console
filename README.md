@@ -5,10 +5,11 @@ Simple C# based developer console for Godot 4.3+.
 
 ## Setup
 1. `git clone` this repo into the `/addons` folder of your Godot project. You should have a `/addons/vekDevConsole` folder with all of the plugin's files.
-2. Enable the `Dev Console` in the plugins tab of your project settings.
-3. Add a `dev_console` action into your project's input map, which can also be found in the project settings (this is necessary for opening the console).
-4. Add the `DevConsole` node to a desired scene in your project. It is strongly recommended to then set the anchor preset to `Full Rect`.
-5. Console time B).
+2. Build the C# solution. If you are placing the addon in a new project, you might have to make a random empty C# script first to be able to build it. 
+3. Enable the `Dev Console` in the plugins tab of your project settings.
+4. Add a `dev_console` action into your project's input map, which can also be found in the project settings (this is necessary for opening the console).
+5. Add the `DevConsole` node to a desired scene in your project. It is strongly recommended to then set the anchor preset to `Full Rect`.
+6. Console time B).
    
 ## Usage
 To add a command to the console, use the DevConsole's `AddCommand(name, command)` method. This is static, and will be accessed anywhere in your project as `DevConsole.AddComand` The name property is a generic string, however the command is a class consisting of 3 notable properties:
