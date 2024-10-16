@@ -251,9 +251,7 @@ public partial class DevConsole : Node
 		Print(GetArgsString(_commands[name]));
 	}
 	public static void HelpAll()
-	{		
-		int padding = 0;
-		
+	{				
 		List<string> sortedHelp = new();
 		
 		foreach (KeyValuePair<string,Command> command in _commands)
