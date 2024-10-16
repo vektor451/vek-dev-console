@@ -91,8 +91,8 @@ public partial class DevConsoleContainer : Control
 		ApplyFontSize();
 	}
 
-    public override void _Ready()
-    {
+	public override void _Ready()
+	{
 		// Hides console at start.
 		_consolePanel.Position = new(0, Size.Y / -_consoleHeight);
 
@@ -149,10 +149,10 @@ public partial class DevConsoleContainer : Control
 			ReadAction = GetBGOpacity,
 			Description = "Change the opacity of the console's background to a value between 0 and 1.",
 		});
-    }
+	}
 
-    public override void _Process(double delta)
-    {
+	public override void _Process(double delta)
+	{
 		// If you change the time scale the standard delta here will be affected. 
 		// This means the opening animation simply won't work when, for instance, paused.
 		// To get around this, we simply calculate our own delta.
@@ -185,8 +185,8 @@ public partial class DevConsoleContainer : Control
 		_consolePanel.Position = new(0, Mathf.Clamp(_consolePanel.Position.Y, -_consoleHeight, 0));
 	}
 
-    public override void _Input(InputEvent @event)
-    {
+	public override void _Input(InputEvent @event)
+	{
 		if(Input.IsActionJustPressed("dev_console"))
 		{
 			_showConsole = !_showConsole;
@@ -216,7 +216,7 @@ public partial class DevConsoleContainer : Control
 			_consoleInput.CaretColumn = _consoleInput.Text.Length;
 			CallDeferred(nameof(AutocompleteDefer));
 		}
-    }
+	}
 
 	public void OnTextChanged(string text)
 	{
