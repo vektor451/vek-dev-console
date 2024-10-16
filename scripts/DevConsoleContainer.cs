@@ -104,7 +104,9 @@ public partial class DevConsoleContainer : Control
 			DevConsole.ConsoleSetTask?.SetResult(true);
 		}
 		
-		CallDeferred(nameof(UpdateLogSize));
+		UpdateConsoleHeight(_consoleHeight);
+		ChangeFontSize(FontSize);
+		
 		_consolePanel.GetThemeStylebox("normal").Set("bg_color", new Color(0, 0, 0, _bgOpacity));
 		
 		// Add commands.
