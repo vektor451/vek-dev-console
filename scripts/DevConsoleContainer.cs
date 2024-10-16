@@ -7,8 +7,6 @@ public partial class DevConsoleContainer : Control
 	const string THEME_PATH = "res://addons/vekDevConsole/consoleTheme.tres";
 	const string AUTOCOMPLETE_OVERRIDE_PATH = "res://addons/vekDevConsole/autoCompleteStyleBox.tres";
 	public float AnimLen = 0.25f;
-	public float ScreenDiv = 2.25f;
-
 	public int FontSize = 24;
 	
 	Panel _consolePanel;
@@ -27,6 +25,10 @@ public partial class DevConsoleContainer : Control
 	List<string> _autoCompleteStrings; 
 	int _autoCompleteIndex = 0;
 	bool _iterateAutoComplete = false;
+
+	string _colorPrintString = "Red: 255, Green: 255, Blue: 255";
+	int _consoleHeight = 960;
+	float _bgOpacity = 0.8f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _EnterTree()
 	{
@@ -37,7 +39,7 @@ public partial class DevConsoleContainer : Control
 
 		// Background
 		_consolePanel = new();
-		_consolePanel.Size = new Vector2(Size.X, Size.Y / ScreenDiv);
+		_consolePanel.Size = new Vector2(Size.X, _consoleHeight);
 		_consolePanel.MouseFilter = MouseFilterEnum.Pass;
 		
 		AddChild(_consolePanel);
@@ -92,7 +94,7 @@ public partial class DevConsoleContainer : Control
     public override void _Ready()
     {
 		// Hides console at start.
-		_consolePanel.Position = new(0, Size.Y / -ScreenDiv);
+		_consolePanel.Position = new(0, Size.Y / -_consoleHeight);
 
 		if(DevConsole._consoleContainer != null)
 			GD.PushError("More than one console exists. Please ensure only one console exists at a time.");
@@ -103,6 +105,7 @@ public partial class DevConsoleContainer : Control
 		}
 		
 		CallDeferred(nameof(UpdateLogSize));
+		_consolePanel.GetThemeStylebox("normal").Set("bg_color", new Color(0, 0, 0, _bgOpacity));
 		
 		// Add commands.
 		DevConsole.AddCommand("con_fontSize", new(){
@@ -126,6 +129,24 @@ public partial class DevConsoleContainer : Control
 			Action = ClearConsole,
 			Description = "Clear the console's log."
 		});
+
+		DevConsole.AddCommand("con_accentColor", new(){
+			Action = UpdateAccentColor,
+			ReadAction = GetAccentColor,
+			Description = "Change the console's accent color (the borders on the input, for instance).",
+		});
+
+		DevConsole.AddCommand("con_height", new(){
+			Action = UpdateConsoleHeight,
+			ReadAction = GetConsoleHeight,
+			Description = "Change the console's height to a pixel value. May not dirrectly correlate to screen resolution.",
+		});
+
+		DevConsole.AddCommand("con_bgOpacity", new(){
+			Action = UpdateBGOpacity,
+			ReadAction = GetBGOpacity,
+			Description = "Change the opacity of the console's background to a value between 0 and 1.",
+		});
     }
 
     public override void _Process(double delta)
@@ -141,25 +162,25 @@ public partial class DevConsoleContainer : Control
 			// Smooth open
 			if(_showConsole && _consolePanel.Position.Y < 0)
 				_consolePanel.Position = new(0, Mathf.Lerp(_consolePanel.Position.Y, 0, 
-				 Size.Y / (ScreenDiv * 24) * (float)_unscaledDelta * AnimLen));
+				 _consoleHeight * 24 * _unscaledDelta * AnimLen));
 			
-			if (!_showConsole && _consolePanel.Position.Y > Size.Y / -ScreenDiv)
-				_consolePanel.Position = new(0, Mathf.Lerp(_consolePanel.Position.Y, Size.Y / -ScreenDiv, 
-				 Size.Y / (ScreenDiv * 24) * (float)_unscaledDelta * AnimLen));
+			if (!_showConsole && _consolePanel.Position.Y > -_consoleHeight)
+				_consolePanel.Position = new(0, Mathf.Lerp(_consolePanel.Position.Y, -_consoleHeight, 
+				 _consoleHeight * (float)_unscaledDelta * AnimLen));
 		}
 		else
 		{
 			// Not so smooth open
 			if(_showConsole && _consolePanel.Position.Y < 0)
 				_consolePanel.Position = new(0, 
-				 _consolePanel.Position.Y + Size.Y / ScreenDiv * (float)_unscaledDelta / AnimLen);
+				 _consolePanel.Position.Y + _consoleHeight * _unscaledDelta / AnimLen);
 			
-			if (!_showConsole && _consolePanel.Position.Y > Size.Y / -ScreenDiv)
+			if (!_showConsole && _consolePanel.Position.Y > -_consoleHeight)
 				_consolePanel.Position = new(0, 
-				 _consolePanel.Position.Y - Size.Y / ScreenDiv * (float)_unscaledDelta / AnimLen);
+				 _consolePanel.Position.Y - _consoleHeight * _unscaledDelta / AnimLen);
 		}
 
-		_consolePanel.Position = new(0, Mathf.Clamp(_consolePanel.Position.Y, -960,0));
+		_consolePanel.Position = new(0, Mathf.Clamp(_consolePanel.Position.Y, -_consoleHeight, 0));
 	}
 
     public override void _Input(InputEvent @event)
@@ -172,10 +193,12 @@ public partial class DevConsoleContainer : Control
 			{
 				CallDeferred(nameof(EnableInput));
 				_consoleInput.GrabFocus();
+				_autoCompleteLabel.Visible = false;
 			}
 			else
 			{
 				_consoleInput.Editable = false;
+				_autoCompleteLabel.Visible = _autoCompleteLabel.Text != "";
 			}
 		}
 		if(Input.IsActionJustPressed("ui_text_indent") && _autoCompleteStrings.Count > 0)
@@ -227,6 +250,7 @@ public partial class DevConsoleContainer : Control
 
 	public void ChangeFontSize(int size)
 	{
+		size = Mathf.Clamp(size, 8, 72);
 		FontSize = size;
 		ApplyFontSize();
 		_consoleLog.CustomMinimumSize = new(Size.X, 0);
@@ -244,6 +268,20 @@ public partial class DevConsoleContainer : Control
 		_autoCompleteLabel.Position = new(0,_consoleInput.Size.Y);
 	}
 
+	private void UpdateConsoleHeight(int height)
+	{
+		height = Mathf.Clamp(height, 192, (int)Size.Y - 192);
+		
+		_consoleHeight = height;
+		_consolePanel.Size = new Vector2(Size.X, _consoleHeight);
+		ChangeFontSize(FontSize);
+	}
+
+	private void GetConsoleHeight()
+	{
+		DevConsole.Print($"Height: {_consoleHeight}");
+	}
+
 	public void Print(string text)
 	{
 		_consoleLog.AppendText("\n" + text);
@@ -251,7 +289,7 @@ public partial class DevConsoleContainer : Control
 
 	private void OnTextSubmitted(string text)
 	{
-		DevConsole.Print("> " + text);
+		DevConsole.Print($"[color=Silver]> {text}[/color]");
 		_consoleInput.Clear();
 
 		DevConsole.SubmitCommand(text);
@@ -296,5 +334,30 @@ public partial class DevConsoleContainer : Control
 	{
 		_consoleInput.GrabFocus();
 		_iterateAutoComplete = true;
+	}
+
+	private void UpdateAccentColor(int red, int green, int blue)
+	{
+		Color accent = new(red/255f, green/255f, blue/255f);
+		_colorPrintString = $"Red: {red}, Green: {green}, Blue: {blue}"; // too hacky imo
+		_consolePanel.GetThemeStylebox("normal").Set("border_color", accent);
+		_consoleInput.GetThemeStylebox("normal").Set("border_color", accent);
+	}
+
+	private void GetAccentColor()
+	{
+		DevConsole.Print($"Accent Color: {_colorPrintString}");
+	}
+
+	private void UpdateBGOpacity(float opacity)
+	{
+		_bgOpacity = Mathf.Clamp(opacity, 0f, 1f);
+		_consolePanel.GetThemeStylebox("panel").Set("bg_color", new Color(0, 0, 0, opacity));
+		_autoCompleteLabel.GetThemeStylebox("normal").Set("bg_color", new Color(0, 0, 0, opacity));
+	}
+
+	private void GetBGOpacity()
+	{
+		Print($"Background Opacity: {_bgOpacity}");
 	}
 }

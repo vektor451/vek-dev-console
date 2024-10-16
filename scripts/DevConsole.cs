@@ -104,7 +104,7 @@ public partial class DevConsole : Node
 		}
 	}
 
-	public static async void PrintAfterConsoleSet(string text, PrintType type)
+	private static async void PrintAfterConsoleSet(string text, PrintType type)
 	{
 		await ConsoleSetTask.Task;
 		Print(text, type);
@@ -127,7 +127,7 @@ public partial class DevConsole : Node
 			return;
 		}
 
-		if (args.Length == 1 && selectedCommand.ReadAction != null)
+		if ((args.Length == 1 || args[1] == "") && selectedCommand.ReadAction != null)
 		{
 			selectedCommand.ReadAction();
 			return;
@@ -252,9 +252,18 @@ public partial class DevConsole : Node
 	}
 	public static void HelpAll()
 	{
+		List<string> sortedHelp = new();
+		
 		foreach (KeyValuePair<string,Command> command in _commands)
 		{
-			Print($"[color=Paleturquoise][b]{command.Key}:[/b][/color] {command.Value.Description}");
+			sortedHelp.Add($"[color=Paleturquoise][b]{command.Key}:[/b][/color] {command.Value.Description}");
+		}
+
+		sortedHelp.Sort();
+
+		foreach (string command in sortedHelp)
+		{
+			Print(command);
 		}
 	}
 
