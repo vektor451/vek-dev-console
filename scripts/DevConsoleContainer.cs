@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Godot;
+using Godot.Collections;
 
 [Tool]
 public partial class DevConsoleContainer : Control
@@ -29,6 +30,9 @@ public partial class DevConsoleContainer : Control
 	string _colorPrintString = "Red: 255, Green: 255, Blue: 255";
 	int _consoleHeight = 960;
 	float _bgOpacity = 0.8f;
+
+	ConfigFile consoleConfig = new();
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _EnterTree()
 	{
@@ -104,9 +108,6 @@ public partial class DevConsoleContainer : Control
 			DevConsole.ConsoleSetTask?.SetResult(true);
 		}
 		
-		UpdateConsoleHeight(_consoleHeight);
-		ChangeFontSize(FontSize);
-		
 		_consolePanel.GetThemeStylebox("normal").Set("bg_color", new Color(0, 0, 0, _bgOpacity));
 		
 		// Add commands.
@@ -149,6 +150,37 @@ public partial class DevConsoleContainer : Control
 			ReadAction = GetBGOpacity,
 			Description = "Change the opacity of the console's background to a value between 0 and 1.",
 		});
+
+		// initialise console prefs
+		DevConsole.Print($"Load \"console.cfg\": {consoleConfig.Load("user://console.cfg").ToString()}");
+
+		if(consoleConfig.HasSectionKey("prefs", "fontSize"))
+			ChangeFontSize((int)consoleConfig.GetValue("prefs", "fontSize"));
+			
+		if(consoleConfig.HasSectionKey("prefs", "animLength"))
+			SetAnimLength((float)consoleConfig.GetValue("prefs", "animLength"));
+			
+		if(consoleConfig.HasSectionKey("prefs", "animInterpolated"))
+			SetInterpolated((bool)consoleConfig.GetValue("prefs", "animInterpolated"));
+			
+		if(consoleConfig.HasSectionKey("prefs", "bgOpacity"))
+			UpdateBGOpacity((float)consoleConfig.GetValue("prefs", "bgOpacity"));
+			
+		if(consoleConfig.HasSectionKey("prefs", "height"))
+			UpdateConsoleHeight((int)consoleConfig.GetValue("prefs", "height"));
+			
+		if(consoleConfig.HasSectionKey("prefs", "color"))
+		{
+			int[] rgb = (int[])consoleConfig.GetValue("prefs", "color");
+			int r = rgb[0];
+			int g = rgb[1];
+			int b = rgb[2];
+
+			UpdateAccentColor(r,g,b);
+		}
+
+		UpdateConsoleHeight(_consoleHeight);
+		ChangeFontSize(FontSize);
 	}
 
 	public override void _Process(double delta)
@@ -257,6 +289,9 @@ public partial class DevConsoleContainer : Control
 		ApplyFontSize();
 		_consoleLog.CustomMinimumSize = new(Size.X, 0);
 		CallDeferred(nameof(DoubleDeferHack));
+
+		consoleConfig.SetValue("prefs", "fontSize", size);
+		SaveCFG();
 	}
 
 	public void GetFontSize()
@@ -277,6 +312,9 @@ public partial class DevConsoleContainer : Control
 		_consoleHeight = height;
 		_consolePanel.Size = new Vector2(Size.X, _consoleHeight);
 		ChangeFontSize(FontSize);
+
+		consoleConfig.SetValue("prefs", "height", height);
+		SaveCFG();
 	}
 
 	private void GetConsoleHeight()
@@ -306,6 +344,9 @@ public partial class DevConsoleContainer : Control
 	{
 		length = Mathf.Clamp(length, 0.01f, 10f);
 		AnimLen = length;
+
+		consoleConfig.SetValue("prefs", "animLength", length);
+		SaveCFG();
 	}
 
 	private void GetAnimLength()
@@ -316,6 +357,8 @@ public partial class DevConsoleContainer : Control
 	private void SetInterpolated(bool value)
 	{
 		_hasInterpolation = value;
+		consoleConfig.SetValue("prefs", "animInterpolated", value);
+		SaveCFG();
 	}
 	private void GetInterpolated()
 	{
@@ -344,6 +387,9 @@ public partial class DevConsoleContainer : Control
 		_colorPrintString = $"Red: {red}, Green: {green}, Blue: {blue}"; // too hacky imo
 		_consolePanel.GetThemeStylebox("normal").Set("border_color", accent);
 		_consoleInput.GetThemeStylebox("normal").Set("border_color", accent);
+
+		consoleConfig.SetValue("prefs", "color", new int[]{red, green, blue});
+		SaveCFG();
 	}
 
 	private void GetAccentColor()
@@ -356,10 +402,18 @@ public partial class DevConsoleContainer : Control
 		_bgOpacity = Mathf.Clamp(opacity, 0f, 1f);
 		_consolePanel.GetThemeStylebox("panel").Set("bg_color", new Color(0, 0, 0, opacity));
 		_autoCompleteLabel.GetThemeStylebox("normal").Set("bg_color", new Color(0, 0, 0, opacity));
+
+		consoleConfig.SetValue("prefs", "bgOpacity", opacity);
+		consoleConfig.Save("user://console.cfg");
 	}
 
 	private void GetBGOpacity()
 	{
 		Print($"Background Opacity: {_bgOpacity}");
+	}
+
+	private void SaveCFG()
+	{
+		DevConsole.Print($"Save \"console.cfg\": {consoleConfig.Save("user://console.cfg").ToString()}");
 	}
 }
