@@ -12,7 +12,7 @@ Simple C# based developer console for Godot 4.3+.
 6. Console time B).
    
 ## Usage
-To add a command to the console, use the DevConsole's `AddCommand(name, command)` method. This is static, and will be accessed anywhere in your project as `DevConsole.AddComand` The name property is a generic string, however the command is a class consisting of 3 notable properties:
+To add a command to the console, use the DevConsole's `AddCommand(name, command)` method. This is static, and will be accessed anywhere in your project as `DevConsole.AddCommand` The name property is a generic string, however the command is a class consisting of 3 notable properties:
 
 - Action: The main method to execute with the console command. Supports arguments of type int, float, string or bool, and is required. 
 - ReadAction: An alternate method executed if the command was submitted with no arguments. Usually used to retrieve the value of a property, but can be used for other means (for instance with the help command, printing all commands and their descriptions). Doesn't support arguments, and is optional.
@@ -24,8 +24,5 @@ This will not work natively in GDScript, and will require you to create a C# scr
 
 ## Todo
 - Make a more in-depth readme with more of the actual usage details of the console.
-- ~~Add further customisation options to the console (background opacity, accent color, size)~~ Done!
-- Save and load console settings
-- ~~Autocomplete and suggestion functionality~~ done!
-- ~~Key blacklisting (for example when you press \` to close the console it also types a \` into it, and we don't want that)~~ Implemented differently but also done!
+- Be able to show the same content as the editor output window. 
 - Other small fixes and improvements.
