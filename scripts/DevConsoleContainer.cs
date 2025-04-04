@@ -23,7 +23,7 @@ public partial class DevConsoleContainer : Control
 	ulong _prevFrame = 0;
 	float _unscaledDelta = 0;
 
-	List<string> _autoCompleteStrings; 
+	List<string> _autoCompleteStrings = new(); 
 	int _autoCompleteIndex = 0;
 	bool _iterateAutoComplete = false;
 
