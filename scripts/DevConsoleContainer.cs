@@ -61,6 +61,7 @@ public partial class DevConsoleContainer : Control
 		_consoleLog.SetAnchorsPreset(LayoutPreset.FullRect);
 		_consoleLog.ScrollFollowing = true;
 		_consoleLog.SelectionEnabled = true;
+		_consoleLog.FocusMode = FocusModeEnum.None;
 		_consoleContainer.AddChild(_consoleLog);
 		
 		// Game/Engine Info
@@ -78,6 +79,8 @@ public partial class DevConsoleContainer : Control
 		_consoleInput = new();
 		_consoleInput.PlaceholderText = "Enter Command";
 		_consoleInput.MouseFilter = MouseFilterEnum.Stop;
+		_consoleInput.FocusMode = FocusModeEnum.None;
+		_consoleInput.KeepEditingOnTextSubmit = true;
 		_consoleInput.ContextMenuEnabled = false;
 		
 		_consoleInput.TextSubmitted += OnTextSubmitted;
@@ -128,6 +131,7 @@ public partial class DevConsoleContainer : Control
 			ReadAction = GetInterpolated,
 			Description = "Change whether or not the opening animation of the console is linearly interpolated."
 		});
+		
 		DevConsole.AddCommand("clear", new(){
 			Action = ClearConsole,
 			Description = "Clear the console's log."
@@ -225,6 +229,7 @@ public partial class DevConsoleContainer : Control
 
 			if(_showConsole)
 			{
+				_consoleInput.FocusMode = FocusModeEnum.All;
 				CallDeferred(nameof(EnableInput));
 				_consoleInput.GrabFocus();
 				_autoCompleteLabel.Visible = false;
@@ -232,6 +237,7 @@ public partial class DevConsoleContainer : Control
 			else
 			{
 				_consoleInput.Editable = false;
+				_consoleInput.FocusMode = FocusModeEnum.None;
 				_autoCompleteLabel.Visible = _autoCompleteLabel.Text != "";
 			}
 		}
@@ -288,7 +294,7 @@ public partial class DevConsoleContainer : Control
 		FontSize = size;
 		ApplyFontSize();
 		_consoleLog.CustomMinimumSize = new(Size.X, 0);
-		CallDeferred(nameof(DoubleDeferHack));
+		CallDeferred(nameof(UpdateLogDeferred));
 
 		consoleConfig.SetValue("prefs", "fontSize", size);
 		SaveCFG();
@@ -335,7 +341,7 @@ public partial class DevConsoleContainer : Control
 		DevConsole.SubmitCommand(text);
 	}
 
-	private void DoubleDeferHack()
+	private void UpdateLogDeferred()
 	{
 		CallDeferred(nameof(UpdateLogSize));
 	}
