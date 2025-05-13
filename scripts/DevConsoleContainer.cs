@@ -5,8 +5,8 @@ using Godot.Collections;
 [Tool]
 public partial class DevConsoleContainer : Control
 {
-	const string THEME_PATH = "res://addons/vekDevConsole/consoleTheme.tres";
-	const string AUTOCOMPLETE_OVERRIDE_PATH = "res://addons/vekDevConsole/autoCompleteStyleBox.tres";
+	const string THEME_PATH = "res://addons/vek-dev-console/consoleTheme.tres";
+	const string AUTOCOMPLETE_OVERRIDE_PATH = "res://addons/vek-dev-console/autoCompleteStyleBox.tres";
 	public float AnimLen = 0.25f;
 	public int FontSize = 24;
 	
