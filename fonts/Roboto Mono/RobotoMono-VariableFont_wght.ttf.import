@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://b62gilv0hranv"
-path="res://.godot/imported/RobotoMono-VariableFont_wght.ttf-091bcfdcbe7e8665a147f625dae9a42f.fontdata"
+path="res://.godot/imported/RobotoMono-VariableFont_wght.ttf-7f458764c03ba6a93f36a3a3411c6f02.fontdata"
 
 [deps]
 
-source_file="res://addons/vekDevConsole/fonts/Roboto Mono/RobotoMono-VariableFont_wght.ttf"
-dest_files=["res://.godot/imported/RobotoMono-VariableFont_wght.ttf-091bcfdcbe7e8665a147f625dae9a42f.fontdata"]
+source_file="res://addons/vek-dev-console/fonts/Roboto Mono/RobotoMono-VariableFont_wght.ttf"
+dest_files=["res://.godot/imported/RobotoMono-VariableFont_wght.ttf-7f458764c03ba6a93f36a3a3411c6f02.fontdata"]
 
 [params]
 
@@ -23,6 +23,7 @@ allow_system_fallback=true
 force_autohinter=false
 hinting=1
 subpixel_positioning=1
+keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null
 fallbacks=[]

@@ -4,9 +4,9 @@ using Godot;
 [Tool]
 public partial class Plugin : EditorPlugin
 {
-	const string CONTAINER_SCRIPT_PATH = "res://addons/vekDevConsole/scripts/DevConsoleContainer.cs";
-	const string CONTAINER_ICON_PATH = "res://addons/vekDevConsole/consoleIcon.svg";
-	const string SINGLETON_PATH = "res://addons/vekDevConsole/scripts/DevConsole.cs";
+	const string CONTAINER_SCRIPT_PATH = "res://addons/vek-dev-console/scripts/DevConsoleContainer.cs";
+	const string CONTAINER_ICON_PATH = "res://addons/vek-dev-console/consoleIcon.svg";
+	const string SINGLETON_PATH = "res://addons/vek-dev-console/scripts/DevConsole.cs";
 	
 	public override void _EnterTree()
 	{
