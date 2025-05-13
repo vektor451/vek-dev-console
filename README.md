@@ -4,7 +4,7 @@ Simple C# based developer console for Godot 4.3+.
 ![image](https://github.com/user-attachments/assets/9ad28997-5251-4451-8f33-2446188540ae)
 
 ## Setup
-1. `git clone` this repo into the `/addons` folder of your Godot project. You should have a `/addons/vekDevConsole` folder with all of the plugin's files.
+1. Add the repo as a submodule in your project. This can be done by opening a terminal in your addons folder (`res://addons/`), and running `git submodule add https://github.com/vektor451/vek-dev-console`. You need to have git installed for this to work.
 2. Build the C# solution. If you are placing the addon in a new project, you might have to make a random empty C# script first to be able to build it. 
 3. Enable the `Dev Console` in the plugins tab of your project settings.
 4. Add a `dev_console` action into your project's input map, which can also be found in the project settings (this is necessary for opening the console).
