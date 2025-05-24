@@ -1,9 +1,9 @@
 [gd_resource type="Theme" load_steps=8 format=3 uid="uid://bce0bt2hng6ad"]
 
-[ext_resource type="FontVariation" uid="uid://icyg3f00kg68" path="res://addons/vekDevConsole/fonts/Roboto Mono/robotoMonoConsole.tres" id="1_ed0y2"]
-[ext_resource type="FontVariation" uid="uid://bgwgc12twcwkc" path="res://addons/vekDevConsole/fonts/Roboto Mono/robotoMonoBoldConsole.tres" id="2_8asuq"]
-[ext_resource type="FontVariation" uid="uid://cyad4p5vd6mwt" path="res://addons/vekDevConsole/fonts/Roboto Mono/robotoMonoBoldItalicConsole.tres" id="3_c868y"]
-[ext_resource type="FontVariation" uid="uid://ytemdg1ri1v8" path="res://addons/vekDevConsole/fonts/Roboto Mono/robotoMonoItalicConsole.tres" id="4_1m37d"]
+[ext_resource type="FontVariation" uid="uid://icyg3f00kg68" path="res://addons/vek-dev-console/fonts/Roboto Mono/robotoMonoConsole.tres" id="1_ed0y2"]
+[ext_resource type="FontVariation" uid="uid://bgwgc12twcwkc" path="res://addons/vek-dev-console/fonts/Roboto Mono/robotoMonoBoldConsole.tres" id="2_8asuq"]
+[ext_resource type="FontVariation" uid="uid://cyad4p5vd6mwt" path="res://addons/vek-dev-console/fonts/Roboto Mono/robotoMonoBoldItalicConsole.tres" id="3_c868y"]
+[ext_resource type="FontVariation" uid="uid://ytemdg1ri1v8" path="res://addons/vek-dev-console/fonts/Roboto Mono/robotoMonoItalicConsole.tres" id="4_1m37d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_atmbc"]
 bg_color = Color(0, 0, 0, 0)

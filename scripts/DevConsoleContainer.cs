@@ -94,6 +94,7 @@ public partial class DevConsoleContainer : Control
 		_consoleInput.AddChild(_autoCompleteLabel);
 		//_autoCompleteLabel.Visible = false;
 		_autoCompleteLabel.Position = new(0,32);
+		_autoCompleteLabel.Visible = false;
 
 		ApplyFontSize();
 	}
