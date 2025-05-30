@@ -1,5 +1,5 @@
 # Vekkie's C# Developer Console
-Simple C# based developer console for Godot 4.3+.
+Simple C# based developer console for Godot 4.4+.
 
 ![image](https://github.com/user-attachments/assets/9ad28997-5251-4451-8f33-2446188540ae)
 
