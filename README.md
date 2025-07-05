@@ -1,3 +1,6 @@
+> [!NOTE]
+> This project is now deprecated in favour of [vek-dev-tools](https://github.com/vektor451/vek-dev-tools).
+
 # Vekkie's C# Developer Console
 Simple C# based developer console for Godot 4.4+.
 
